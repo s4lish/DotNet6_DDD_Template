@@ -1,17 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.Services;
+using Infrastructure.Authentication;
+using Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Application.Common.Interfaces.Persistence;
+using Infrastructure.Persistence;
 
 namespace Infrastructure
 {
     public static class InfrastructureRegister
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
         {
+
+            services.Configure<JwtSettings>(configuration.GetSection(JwtSettings._SectionName));
+
+            services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

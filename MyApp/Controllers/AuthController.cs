@@ -26,7 +26,9 @@ namespace MyApp.Controllers
         {
             var res = _authService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
-            return Ok(res);
+            var response = new AuthenticationResponse(res.User.Id, res.User.FirstName, res.User.LastName, res.User.Email, res.Token);
+
+            return Ok(response);
         }
 
         [HttpPost("login")]
@@ -34,7 +36,9 @@ namespace MyApp.Controllers
         {
             var res = _authService.Login(request.Email, request.Password);
 
-            return Ok(res);
+            var response = new AuthenticationResponse(res.User.Id, res.User.FirstName, res.User.LastName, res.User.Email, res.Token);
+
+            return Ok(response);
         }
     }
 }
