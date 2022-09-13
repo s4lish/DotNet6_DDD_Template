@@ -1,16 +1,16 @@
 ﻿using Application.Services.AuthService;
+using Domain.Common.Errors;
+using ErrorOr;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Contracts.Authentication;
-using MyApp.Filters;
 
 namespace MyApp.Controllers
 {
     [Route("auth")]
-    [ApiController]
    // [ErrorHandlingFilter]
    // Add Filter For Specific Controller or Add for All in Program.cs
-    public class AuthController : ControllerBase
+    public class AuthController : ApiController
     {
 
         private readonly IAuthService _authService;
@@ -27,21 +27,48 @@ namespace MyApp.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var res = _authService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthResult> res = _authService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
-            var response = new AuthenticationResponse(res.User.Id, res.User.FirstName, res.User.LastName, res.User.Email, res.Token);
 
-            return Ok(response);
+
+            return res.Match(
+                authResult => Ok(MatchResult(authResult)),
+                 errors => Problem(errors)
+                );
+
         }
 
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var res = _authService.Login(request.Email, request.Password);
+            ErrorOr<AuthResult> res = _authService.Login(request.Email, request.Password);
 
-            var response = new AuthenticationResponse(res.User.Id, res.User.FirstName, res.User.LastName, res.User.Email, res.Token);
 
-            return Ok(response);
+            if(res.IsError && res.FirstError == Errors.Authentication.InvalidCredentials)
+            {
+                return Problem(
+                    statusCode:StatusCodes.Status401Unauthorized,
+                    title:res.FirstError.Description
+                    );
+            }
+
+
+            return res.Match(
+                 authResult => Ok(MatchResult(authResult)),
+                 errors => Problem(errors)
+                 );
+        }
+
+
+        private static AuthenticationResponse MatchResult(AuthResult authResult)
+        {
+            return new AuthenticationResponse(
+                authResult.User.Id,
+                authResult.User.FirstName,
+                authResult.User.LastName,
+                authResult.User.Email,
+                authResult.Token
+                );
         }
     }
 }

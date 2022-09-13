@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using ErrorOr;
+using MyApp.Common.Http;
 
-namespace MyApp.Errors
+namespace MyApp.Common.Errors
 {
     public class MyAppProblemDetailsFactory : ProblemDetailsFactory
     {
@@ -90,7 +92,11 @@ namespace MyApp.Errors
                 problemDetails.Extensions["traceId"] = traceId;
             }
 
-            problemDetails.Extensions.Add("customProperty", "customValue");
+            var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
+            if(errors is not null)
+            {
+                problemDetails.Extensions.Add("errorCodes", errors.Select(e=>e.Code));
+            }
         }
 
 

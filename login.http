@@ -5,6 +5,6 @@ POST {{host}}/auth/login
 Content-Type:{{contentType}}
 
 {
-    "Email":"s4lish@gmail.com",
+    "Email":"1s4lish@gmail.com",
     "Password":"ali@1368"
 }

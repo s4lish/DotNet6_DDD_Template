@@ -1,6 +1,8 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.Persistence;
+using Domain.Common.Errors;
 using Domain.Entities;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,16 @@ namespace Application.Services.AuthService
             _jwtTokenGenerator = jwtTokenGenerator;
             _userRepository = userRepository;
         }
-        public AuthResult Login(string Email, string Password)
+        public ErrorOr<AuthResult> Login(string Email, string Password)
         {
             if (_userRepository.GetUserByEmail(Email) is not User user)
             {
-                throw new Exception("user does not exist");
+                return Errors.Authentication.InvalidCredentials;
             }
              
             if(user.Password != Password)
             {
-                throw new Exception("Invalid Password");
+                return Errors.Authentication.InvalidCredentials;
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
@@ -36,12 +38,12 @@ namespace Application.Services.AuthService
             return new AuthResult(user, token);
         }
 
-        public AuthResult Register(string FirstName, string LastName, string Email, string Password)
+        public ErrorOr<AuthResult> Register(string FirstName, string LastName, string Email, string Password)
         {
             //Check if User already exists
             if (_userRepository.GetUserByEmail(Email) is not null)
             {
-                throw new Exception("user already exists");
+                return Errors.User.DuplicateEmail;
             }
 
             var user = new User
