@@ -1,4 +1,6 @@
-﻿using Application.Common.Interfaces.Authentication;
+﻿using Application.Common.Errors;
+using Application.Common.Erros2;
+using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.Persistence;
 using Domain.Entities;
 using System;
@@ -23,25 +25,31 @@ namespace Application.Services.AuthService
         {
             if (_userRepository.GetUserByEmail(Email) is not User user)
             {
-                throw new Exception("user does not exist");
+                // Flow Control (1/4) user Custom Exceptions. directly send to error route.
+                throw new UserNotFoundExceptions();
+
             }
              
             if(user.Password != Password)
             {
-                throw new Exception("Invalid Password");
+                throw new UserNotFoundExceptions();
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new AuthResult(user, token);
         }
-
-        public AuthResult Register(string FirstName, string LastName, string Email, string Password)
+        //use of OneOf to flow control exceptions
+        //oneOf use to have a multi return types !!
+        // Flow Control (2/4) OneOf - return error to controller and controller send it to error route with OneOf
+        public OneOf<AuthResult, IServiceException> Register(string FirstName, string LastName, string Email, string Password)
         {
             //Check if User already exists
             if (_userRepository.GetUserByEmail(Email) is not null)
             {
-                throw new Exception("user already exists");
+                //or
+
+                return new DuplicateEmailExceptions();
             }
 
             var user = new User
@@ -53,9 +61,33 @@ namespace Application.Services.AuthService
             };
 
             _userRepository.Add(user);
-            //Create User (generate Unique Id) and Persist to DB
-            //Create JWT Tokken
 
+            var token = _jwtTokenGenerator.GenerateToken(user);
+
+            return new AuthResult(user, token);
+        }
+
+        // Flow Control (3/4) Fluent - Result return error to controller and controller send it to error route with Fluent
+        public Result<AuthResult> Register2(string FirstName, string LastName, string Email, string Password)
+        {
+            //Check if User already exists
+            if (_userRepository.GetUserByEmail(Email) is not null)
+            {
+                //or
+                // Flow Control (2/4) return error to controller and controller send it to error route with OneOf
+
+                return Result.Fail<AuthResult>(new[] { new DuplicateEmailErrorWithFluent() });
+            }
+
+            var user = new User
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Password = Password
+            };
+
+            _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 

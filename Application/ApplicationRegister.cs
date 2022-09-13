@@ -1,4 +1,7 @@
-﻿using Application.Services.AuthService;
+﻿global using OneOf;
+global using FluentResults;
+
+using Application.Services.AuthService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application

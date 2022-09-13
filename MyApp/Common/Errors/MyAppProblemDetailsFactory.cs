@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace MyApp.Errors
+namespace MyApp.Common.Errors
 {
     public class MyAppProblemDetailsFactory : ProblemDetailsFactory
     {
