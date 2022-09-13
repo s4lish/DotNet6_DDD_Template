@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Contracts.Authentication;
+using MyApp.Filters;
 
 namespace MyApp.Controllers
 {
     [Route("auth")]
     [ApiController]
+   // [ErrorHandlingFilter]
+   // Add Filter For Specific Controller or Add for All in Program.cs
     public class AuthController : ControllerBase
     {
 
