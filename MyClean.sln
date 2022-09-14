@@ -19,12 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{3995C515-E656-49DD-9555-3D7EA4A735EA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{F6BE2569-E7D8-4251-BE38-C66DD8533E57}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{F7421478-4C4E-4673-A009-C27DFE950E0E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentication", "{B3E26D63-19EF-4F12-8CC2-BD705821D9C9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentication", "{3F8A2EF8-A1FE-465C-9A81-AEB045793C9D}"
 	ProjectSection(SolutionItems) = preProject
-		login.http = login.http
-		Register.http = Register.http
+		Requests\Autentication\login.http = Requests\Autentication\login.http
+		Requests\Autentication\Register.http = Requests\Autentication\Register.http
 	EndProjectSection
 EndProject
 Global
@@ -63,7 +63,7 @@ Global
 		{65AACCE6-67A8-4C84-B4C9-0D19DF7FA841} = {3995C515-E656-49DD-9555-3D7EA4A735EA}
 		{3664B656-9A6F-466C-8AE7-ABD268D82FA9} = {615357EF-7CE5-4A01-88FE-C61E25AEBE91}
 		{C82FB735-F883-493C-9A6D-F01BA1C80039} = {615357EF-7CE5-4A01-88FE-C61E25AEBE91}
-		{B3E26D63-19EF-4F12-8CC2-BD705821D9C9} = {F6BE2569-E7D8-4251-BE38-C66DD8533E57}
+		{3F8A2EF8-A1FE-465C-9A81-AEB045793C9D} = {F7421478-4C4E-4673-A009-C27DFE950E0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D088E259-8563-40E1-B2E1-BB094C4681AA}

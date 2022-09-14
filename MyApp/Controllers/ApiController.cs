@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Common.Http;
 
@@ -8,6 +7,7 @@ namespace MyApp.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {
+
         protected IActionResult Problem(List<Error> errors)
         {
             HttpContext.Items[HttpContextItemKeys.Errors] = errors;

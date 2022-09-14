@@ -1,7 +1,8 @@
-﻿using Application.Services.AuthService;
-using Domain.Common.Errors;
+﻿using Application.Authentication.Command.Register;
+using Application.Authentication.Common;
+using Application.Authentication.Queries.Login;
 using ErrorOr;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Contracts.Authentication;
 
@@ -13,11 +14,14 @@ namespace MyApp.Controllers
     public class AuthController : ApiController
     {
 
-        private readonly IAuthService _authService;
+        //private readonly IMediator _mediator;
 
-        public AuthController(IAuthService authService)
+        //just use of ISender Interface of Mediator
+        private readonly ISender _mediator;
+
+        public AuthController(IMediator mediator)
         {
-            _authService = authService;
+            _mediator = mediator;
         }
         public IActionResult Get()
         {
@@ -25,9 +29,11 @@ namespace MyApp.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            ErrorOr<AuthResult> res = _authService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+
+            ErrorOr<AuthResult> res = await _mediator.Send(command);
 
 
 
@@ -39,9 +45,12 @@ namespace MyApp.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            ErrorOr<AuthResult> res = _authService.Login(request.Email, request.Password);
+            var query = new LoginQuery(request.Email, request.Password);
+
+            ErrorOr<AuthResult> res = await _mediator.Send(query);
+
 
             return res.Match(
                  authResult => Ok(MatchResult(authResult)),

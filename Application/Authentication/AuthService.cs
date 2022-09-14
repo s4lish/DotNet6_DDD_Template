@@ -1,13 +1,6 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.Persistence;
-using Domain.Common.Errors;
-using Domain.Entities;
-using ErrorOr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Authentication.Common;
 
 namespace Application.Services.AuthService
 {
