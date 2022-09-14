@@ -16,8 +16,9 @@ namespace MyApp.Controllers
             var statusCode = firstError.Type switch
             {
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
-                ErrorType.Validation => StatusCodes.Status400BadRequest,
+                ErrorType.Validation => StatusCodes.Status401Unauthorized,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.Failure => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError,
 
             };

@@ -43,16 +43,6 @@ namespace MyApp.Controllers
         {
             ErrorOr<AuthResult> res = _authService.Login(request.Email, request.Password);
 
-
-            if(res.IsError && res.FirstError == Errors.Authentication.InvalidCredentials)
-            {
-                return Problem(
-                    statusCode:StatusCodes.Status401Unauthorized,
-                    title:res.FirstError.Description
-                    );
-            }
-
-
             return res.Match(
                  authResult => Ok(MatchResult(authResult)),
                  errors => Problem(errors)
