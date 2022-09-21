@@ -1,17 +1,18 @@
 using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using MyApp;
 using MyApp.Common.Errors;
+using MyApp.Common.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 {
 
     builder.Services
         .AddApplication()
+        .AddPresentation()
         .AddInfrastructure(builder.Configuration);
 
-    builder.Services.AddControllers();
-    builder.Services.AddSingleton<ProblemDetailsFactory, MyAppProblemDetailsFactory>();
 }
 
 

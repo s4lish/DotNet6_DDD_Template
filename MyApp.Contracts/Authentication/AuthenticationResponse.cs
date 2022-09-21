@@ -8,7 +8,7 @@ namespace MyApp.Contracts.Authentication
 {
     public record AuthenticationResponse(
         Guid Id,
-        string FirstnName,
+        string FirstName,
         string LastName,
         string Email,
         string Token

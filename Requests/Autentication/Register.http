@@ -5,8 +5,8 @@ POST {{host}}/auth/register
 Content-Type:{{contentType}}
 
 {
-    "FirstName":"Ali",
+    "FirstName":"Ali2",
     "LastName":"Seyed Hamzeh",
-    "Email":"s4lish@gmail.com",
+    "Email":"55s4lish@gmail.com",
     "Password":"ali@1368"
 }
